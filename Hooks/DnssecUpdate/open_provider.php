@@ -5,8 +5,8 @@
          *** SoluteDNS for WHMCS ***
 
 File:					custom_hooks.php
-Version:				0.0.1
-Date:					18-02-2015
+Version:				0.0.2
+Date:					05-08-2016
 Provider:				Openprovider
 Sponsor:				uHost.nl
 
@@ -33,8 +33,8 @@ information about SoluteDNS hooks and when they are triggered.
 
 Compatibility:
 -------------------------------
-WHMCS:			v6.2.x or later
-SoluteDNS:		v0.2.4 or later
+WHMCS:			v6.3.x or later
+SoluteDNS:		v0.2.5 or later
 -------------------------------
 */
 
@@ -97,18 +97,13 @@ function SDNS_hook_DnssecUpdate($vars) {
 				
 				if ($public_key == NULL) continue;	
 				
+				if ($result['flag'] == 'CSK') $flag = '257';
 				if ($result['flag'] == 'KSK') $flag = '257';
 				if ($result['flag'] == 'ZSK') $flag = '256';
-				
-				if ($result['algorithm'] == 'RSASHA1') $algorithm = '5';
-				if ($result['algorithm'] == 'RSANSEC3SHA1') $algorithm = '7';
-				if ($result['algorithm'] == 'RSASHA256') $algorithm = '8';
-				if ($result['algorithm'] == 'RSASHA512') $algorithm = '10';
-				if ($result['algorithm'] == 'ECC-GOST') $algorithm = '12';
-				
+								
 				$send_dnssec[] = array(
 					'flags' => $flag,
-					'alg' => $algorithm,
+					'alg' => $result['algorithm'],
 					'protocol' => 3,
 					'pubKey' => $public_key,
 				);
